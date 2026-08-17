@@ -151,6 +151,21 @@
   .steplist li.on{box-shadow:0 0 0 3px var(--mint),var(--shadow);transform:translateY(-1px);}
   .steplist li.on::before{background:var(--mint);color:#fff;}
   .steplist:empty{display:none;}
+  /* 2D top-face pattern cards (case gallery) */
+  .casecards{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 14px;}
+  .ccard{cursor:pointer;background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;
+    text-align:center;border:3px solid transparent;transition:transform .12s,border-color .12s;}
+  .ccard:hover{transform:translateY(-3px);}
+  .ccard.sel{border-color:var(--sun);transform:translateY(-2px);}
+  .ccard .tgrid{display:grid;grid-template-columns:repeat(3,22px);grid-template-rows:repeat(3,22px);
+    gap:3px;margin:0 auto 8px;padding:5px;background:#2b241d;border-radius:8px;}
+  .ccard .tc{border-radius:4px;background:#5b5148;}
+  .ccard .tc.y{background:var(--w-yellow);}
+  .ccard .tc.n{background:#efe7db;}
+  .ccard .cname{font-weight:900;font-size:15px;color:var(--ink);}
+  .ccard .csub{font-size:12px;color:var(--ink-soft);margin-top:1px;max-width:120px;}
+  .stage.cardmini{width:96px;height:96px;perspective:420px;margin:0 auto 8px;}
+  .stage.cardmini .cube{cursor:default;}
 
   .algo{display:inline-flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
   .algo code{background:#fff4e8;border:2px solid #ffe0bd;border-radius:10px;padding:5px 11px;
@@ -197,9 +212,11 @@
       <a href="#notation">轉法記號</a>
       <a href="#cross">白色十字</a>
       <a href="#corners">角塊歸位</a>
+      <a href="#align1">對齊側邊</a>
       <a href="#done">第一層完成</a>
       <a href="#layer2">第二層</a>
       <a href="#layer3">第三層</a>
+      <a href="#match">對照圖庫</a>
       <a href="#twobytwo">2×2</a>
     </div>
   </div>
@@ -285,18 +302,15 @@
   <div class="card grid2">
     <div class="cube-panel">
       <div class="stage" id="cross-stage"><div class="cube" id="cross-cube"></div></div>
-      <div class="cap" id="cross-cap">選一個情境，看方塊分步示範 👇</div>
-      <div class="tool-row" id="cross-scn"></div>
+      <div class="cap" id="cross-cap">👉 點右邊最像你方塊的那張圖</div>
       <div class="tool-row"><button class="tool reset" onclick="crossCube.reset()">↺ 重置</button></div>
     </div>
     <div>
-      <div class="caserow">
-        <div class="stage mini" id="cross-mini"><div class="cube" id="cross-mini-cube"></div></div>
-        <div class="situation" id="cross-situation">👈 從左邊選一個<b>情境</b>，這裡（靜態圖例）會顯示「現在是什麼狀況」，左邊方塊則會動態示範。</div>
-      </div>
+      <p style="margin-top:0;font-weight:800">① 你的白色邊塊在哪裡？（白色朝上，點最像的那張圖）</p>
+      <div class="casecards" id="cross-cards"></div>
+      <div class="situation" id="cross-situation">👆 先點一張最像你方塊的圖，我會告訴你怎麼把它轉上白色十字。</div>
       <div class="algo" id="cross-algo"></div>
-      <ol class="steplist" id="cross-steps"></ol>
-      <div class="tip">✅ <b>檢查點：</b>轉好後從側面看，四個白邊會像「小旗子」一樣，顏色和下方中心連成一直線，頂面呈現白色十字。</div>
+      <div class="tip" style="margin-top:12px">✅ <b>檢查點：</b>轉好後從側面看，四個白邊會像「小旗子」一樣，顏色和下方中心連成一直線，頂面呈現白色十字。</div>
     </div>
   </div>
 </section>
@@ -311,15 +325,39 @@
   <div class="card grid2">
     <div class="cube-panel">
       <div class="stage" id="corner-stage"><div class="cube" id="corner-cube"></div></div>
-      <div class="cap" id="corner-cap">選一個情境，看右手口訣怎麼運作 👇</div>
-      <div class="tool-row" id="corner-scn"></div>
+      <div class="cap" id="corner-cap">👉 點右邊最像你方塊的那張圖</div>
       <div class="tool-row"><button class="tool reset" onclick="cornerCube.reset()">↺ 重置</button></div>
     </div>
     <div>
-      <p style="margin-top:0"><b>右手小口訣：</b>把要處理的白角塊放到它「目標位置的正上方」（右前上角），然後重複這一組，直到角塊乖乖歸位：</p>
-      <div class="algo"><code>R</code><code>U</code><code>R′</code><code>U′</code></div>
-      <p style="font-size:14px;color:var(--ink-soft)">唸法：「右上、右回、上回」。最多重複幾次，白色就會轉到正確方向、卡進底層。</p>
-      <div class="tip">🖐️ <b>訣竅：</b>四個角塊都用同一招，只要每次先把目標角落轉到右前上方即可。四個角都塞好，恭喜——<b>第一層完成！</b></div>
+      <p style="margin-top:0;font-weight:800">① 你的白色角塊是哪種情況？（點最像的那張圖）</p>
+      <div class="casecards" id="corner-cards"></div>
+      <div class="situation" id="corner-situation">👆 先點一張最像你方塊的圖。核心口訣是右手小口訣 <code style="color:var(--pink)">R U R′ U′</code>。</div>
+      <div class="algo" id="corner-algo"></div>
+      <div class="tip" style="margin-top:12px">🖐️ <b>訣竅：</b>四個角塊都用同一招，只要每次先把目標角落轉到<b>右前上角</b>。四個角都塞好，白色面就拼好了！如果側邊顏色沒對齊，就到下一段「對齊側邊」。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 完成第一層：對齊側邊（照 maru 的兩公式） -->
+<section id="align1" class="wrap">
+  <div class="sec-head">
+    <div class="step-chip c-grape">±</div>
+    <div><h2>完成第一層：對齊側邊</h2></div>
+  </div>
+  <p class="sub">白色面拼好後，如果<b>側邊顏色還沒對到中心</b>，用 maru 的兩個公式對調就好——一個管邊塊、一個管角塊。點圖看示範。</p>
+  <div class="card grid2">
+    <div class="cube-panel">
+      <div class="stage" id="align1-stage"><div class="cube" id="align1-cube"></div></div>
+      <div class="cap" id="align1-cap">👉 點右邊的情況看公式示範</div>
+      <div class="tool-row" id="align1-play"></div>
+      <div class="tool-row"><button class="tool reset" onclick="align1Cube.reset()">↺ 重置</button></div>
+    </div>
+    <div>
+      <p style="margin-top:0;font-weight:800">① 哪個沒對齊？（點最像的那張圖）</p>
+      <div class="casecards" id="align1-cards"></div>
+      <div class="situation" id="align1-situation">👆 先點一張圖。這兩個是 maru 原網站的公式。</div>
+      <div class="algo" id="align1-algo"></div>
+      <div class="tip" style="margin-top:12px">💡 這兩招會用到<b>中層轉法 M、S</b>（夾在兩面中間那一層）。四個邊、四個角都對齊後，<b>第一層就真正完成</b>，把方塊翻過來（白色朝下）就能開始第二層。</div>
     </div>
   </div>
 </section>
@@ -361,17 +399,16 @@
   <div class="card grid2">
     <div class="cube-panel">
       <div class="stage" id="l2-stage"><div class="cube" id="l2-cube"></div></div>
-      <div class="cap" id="l2-cap">選一個情境，看邊塊怎麼插進中層 👇</div>
-      <div class="tool-row" id="l2-scn"></div>
+      <div class="cap" id="l2-cap">👉 點右邊最像你方塊的那張圖</div>
       <div class="tool-row"><button class="tool reset" onclick="l2Cube.reset()">↺ 重置</button></div>
     </div>
     <div>
-      <p style="margin-top:0"><b>怎麼判斷？</b> 在頂層（黃面）找一個<b>不含黃色</b>的邊塊，轉頂層 <code style="color:var(--pink)">U</code> 讓它的正面顏色<b>對到中心</b>，形成一個「倒 T」。再看它頂上的顏色要往<b>左</b>還是<b>右</b>邊的中心走：</p>
-      <p style="margin-bottom:4px"><b>要往右邊插：</b></p>
-      <div class="algo"><code>U</code><code>R</code><code>U′</code><code>R′</code><code>U′</code><code>F′</code><code>U</code><code>F</code></div>
-      <p style="margin-bottom:4px"><b>要往左邊插：</b></p>
-      <div class="algo"><code>U′</code><code>L′</code><code>U</code><code>L</code><code>U</code><code>F</code><code>U′</code><code>F′</code></div>
-      <div class="tip">🔁 <b>邊塊卡在錯的位置（顏色反了）？</b> 隨便用一個口訣把它「換」到頂層，再重新對準插入即可。四個邊都放好，前兩層就完成了！</div>
+      <p style="margin-top:0;font-weight:800">① 邊塊要往左還是往右？（點最像的那張圖）</p>
+      <p style="margin-top:0;font-size:14px;color:var(--ink-soft)">先在頂層（黃面）找一個<b>不含黃色</b>的邊塊，轉 <code style="color:var(--pink)">U</code> 讓它的正面顏色對到中心（形成倒 T），再看它<b>頂上的顏色</b>要往哪邊。</p>
+      <div class="casecards" id="l2-cards"></div>
+      <div class="situation" id="l2-situation">👆 先點一張最像你方塊的圖。</div>
+      <div class="algo" id="l2-algo"></div>
+      <div class="tip" style="margin-top:12px">🔁 <b>邊塊卡在錯位（顏色反了）？</b> 隨便選一種（往右／往左）先把它「踢」回頂層，再重新對準插入即可。四個邊都放好，前兩層就完成了！</div>
     </div>
   </div>
 </section>
@@ -400,6 +437,30 @@
       <p style="margin-bottom:4px"><b>④ 喬邊塊位置</b>：最後把四個邊塊轉到定位。</p>
       <div class="algo"><code>R</code><code>U′</code><code>R</code><code>U</code><code>R</code><code>U</code><code>R</code><code>U′</code><code>R′</code><code>U′</code><code>R2</code></div>
       <div class="tip">🎉 四步做完，整顆方塊就<b>完全還原</b>！這套就是全世界新手最常用的「分層還原法（Layer-by-Layer）」。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 對照圖庫：黃色十字辨識器 -->
+<section id="match" class="wrap">
+  <div class="sec-head">
+    <div class="step-chip c-sun">🔍</div>
+    <div><h2>對照你的方塊（黃色十字示範）</h2></div>
+  </div>
+  <p class="sub">不知道自己是哪種情況？看看你手上方塊的<b>頂面（黃色面）</b>長怎樣，<b>點右邊最像的那張圖</b>，左邊方塊就會擺成那樣讓你比對，再按播放看它怎麼變成十字。</p>
+  <div class="card grid2">
+    <div class="cube-panel">
+      <div class="stage" id="match-stage"><div class="cube" id="match-cube"></div></div>
+      <div class="cap" id="match-cap">👉 點右邊最像你方塊的那張圖</div>
+      <div class="tool-row" id="match-play"></div>
+      <div class="tool-row"><button class="tool reset" onclick="matchCube.reset()">↺ 重置</button></div>
+    </div>
+    <div>
+      <p style="margin-top:0;font-weight:800">① 你的頂面像哪一張？（只看黃色，中間一定是黃色）</p>
+      <div class="casecards" id="match-cards"></div>
+      <div class="situation" id="match-sit">👆 先點一張最像你方塊的圖，我會告訴你「怎麼拿、轉幾次」。</div>
+      <div class="algo" id="match-algo"></div>
+      <div class="tip" style="margin-top:12px">🔑 <b>只有一招：</b><code style="color:var(--pink)">F R U R′ U′ F′</code>。看你離十字多遠就重複幾次——<b>橫線 1 次、直角 2 次、點 3 次</b>。這個「點圖對照」的方式，之後可以套到第二層和第三層的每個步驟。</div>
     </div>
   </div>
 </section>
@@ -467,10 +528,14 @@ const MOVES = {
 };
 // whole-cube rotations: x follows R, y follows U, z follows F
 const WHOLE = { x:{axis:'x',dir:-1}, y:{axis:'y',dir:-1}, z:{axis:'z',dir:-1} };
+// middle-slice turns (layer 0): M follows L, E follows D, S follows F
+const SLICES = { M:{axis:'x',layer:0,dir:1}, E:{axis:'y',layer:0,dir:1}, S:{axis:'z',layer:0,dir:-1} };
 function parseMove(token){
   const face=token[0];
-  const whole = !!WHOLE[face];
-  const base = whole ? WHOLE[face] : MOVES[face];
+  let base, whole=false;
+  if(WHOLE[face]){ base=WHOLE[face]; whole=true; }
+  else if(SLICES[face]){ base=SLICES[face]; }
+  else base=MOVES[face];
   let dir=base.dir, times=token.includes('2')?2:1;
   if(token.includes("'")) dir=-dir;
   return {whole, axis:base.axis, layer:whole?null:base.layer, dir, times, face};
@@ -722,28 +787,58 @@ Cube.prototype.playPending=async function(slow){
   }
 };
 
-// white-cross cases: each has a situation description + per-step explanation
+// white-cross cases (white up): compare your cube to the mini thumbnails, click the match
 const crossCases=[
-  {label:'情況①',
-   situation:'白色邊塊在<b>前面（綠色面）的正下方</b>——白色朝下。只要把前面往上翻兩下，它就會上到頂面。',
-   solve:['F','F'],
+  {name:'前面白邊', sub:'在前面（綠）下方', label:'前面白邊',
+   sit:'白色邊塊在<b>前面（綠色面）的正下方</b>。做法：把前面往上翻兩下（<b>F2</b>），它就會上到頂面十字的位置。',
+   solve:['F','F'], chip:['F','F'],
    intro:'白邊在前面正下方，把前面翻兩下 👀',
-   steps:['轉 <b>F</b>：前面（綠色面）往上翻第一下','轉 <b>F</b>：再翻一下——白邊翻到頂面十字的位置 ✅']},
-  {label:'情況②',
-   situation:'白色邊塊在<b>右面（紅色面）的下方</b>。把右面往上翻兩下，就能把它送到頂面。',
-   solve:['R','R'],
+   steps:['轉 <b>F</b>：前面往上翻第一下','轉 <b>F</b>：再翻一下——白邊翻到頂面 ✅']},
+  {name:'右面白邊', sub:'在右面（紅）下方', label:'右面白邊',
+   sit:'白色邊塊在<b>右面（紅色面）的下方</b>。做法：把右面往上翻兩下（<b>R2</b>）送到頂面。',
+   solve:['R','R'], chip:['R','R'],
    intro:'白邊在右面下方，把右面翻兩下 👀',
-   steps:['轉 <b>R</b>：右面（紅色面）往上翻第一下','轉 <b>R</b>：再翻一下——白邊翻到頂面 ✅']},
-  {label:'情況③',
-   situation:'白色邊塊<b>卡在中間層</b>（不在頂面也不在底面）。要先把它「請」到頂層，再對準扣下去。',
-   solve:['R','U',"R'"],
+   steps:['轉 <b>R</b>：右面往上翻第一下','轉 <b>R</b>：再翻一下——白邊翻到頂面 ✅']},
+  {name:'左面白邊', sub:'在左面（橘）下方', label:'左面白邊',
+   sit:'白色邊塊在<b>左面（橘色面）的下方</b>。做法：把左面往上翻兩下（<b>L2</b>）送到頂面。',
+   solve:['L','L'], chip:['L','L'],
+   intro:'白邊在左面下方，把左面翻兩下 👀'},
+  {name:'後面白邊', sub:'在後面（藍）下方', label:'後面白邊',
+   sit:'白色邊塊在<b>後面（藍色面）的下方</b>。做法：把後面往上翻兩下（<b>B2</b>）送到頂面。',
+   solve:['B','B'], chip:['B','B'],
+   intro:'白邊在後面下方，把後面翻兩下 👀'},
+  {name:'卡在中間層', sub:'不在頂也不在底', label:'卡在中間層',
+   sit:'白色邊塊<b>卡在中間層</b>。做法：先用 <b>R U R′</b> 把它「請」到頂層，再對準中心扣下去。',
+   solve:['R','U',"R'"], chip:['R','U',"R'"],
    intro:'白邊卡在中間層，先請上頂層 👀',
-   steps:['轉 <b>R</b>：把卡住的白邊帶到頂層','轉 <b>U</b>：讓白邊往旁邊移開，空出原本的位置','轉 <b>R′</b>：把右面轉回來——白邊就安全留在頂層，之後再對準中心扣下去']}
+   steps:['轉 <b>R</b>：把卡住的白邊帶到頂層','轉 <b>U</b>：讓白邊往旁邊移開','轉 <b>R′</b>：白邊留在頂層，再對準扣下去']}
 ];
-const cornerScenarios=[
-  {label:'口訣一次', solve:['R','U',"R'","U'"],     intro:'基本右手口訣 <b>R U R′ U′</b>'},
-  {label:'重複歸位', solve:['R','U',"R'","U'",'R','U',"R'","U'",'R','U',"R'","U'"], intro:'重複 <b>R U R′ U′</b> 直到白角乖乖歸位'},
-  {label:'從頂層送下', solve:["U'","R'","U",'R'],   intro:'白角在頂層 → <b>U′ R′ U R</b> 送進底層'}
+// white-corner cases (white up)
+const RUU=['R','U',"R'","U'"];
+const cornerCases=[
+  {name:'白朝右', sub:'底角、白色朝右面', label:'白朝右',
+   sit:'白角在<b>右前底角</b>、<b>白色朝右邊</b>。做法：<b>R U R′</b>（右手口訣一次）就把它轉上正確角落。',
+   solve:['R','U',"R'"], chip:['R','U',"R'"], intro:'白色朝右 → <b>R U R′</b>'},
+  {name:'白朝前', sub:'底角、白色朝前面', label:'白朝前',
+   sit:'白角在<b>右前底角</b>、<b>白色朝前面</b>。做法：<b>F′ U′ F</b> 把它轉上正確角落。',
+   solve:["F'","U'",'F'], chip:["F'","U'",'F'], intro:'白色朝前 → <b>F′ U′ F</b>'},
+  {name:'白朝下(翻反)', sub:'底角、白色朝下', label:'白朝下(翻反)',
+   sit:'白角已在底角、但<b>白色朝下（翻反了）</b>。做法：<b>重複右手口訣 R U R′ U′</b>，白色會轉到正確方向再卡進去。',
+   solve:[...RUU,...RUU,...RUU], chip:RUU, intro:'白色朝下 → 重複 <b>R U R′ U′</b> 到白色朝下卡好'},
+  {name:'角在頂層', sub:'白角在頂層，送下去', label:'角在頂層',
+   sit:'白角在<b>頂層正上方</b>，要送進下面的角落。做法：<b>U′ R′ U R</b> 把它塞進底層。',
+   solve:["U'","R'","U",'R'], chip:["U'","R'","U",'R'], intro:'白角在頂層 → <b>U′ R′ U R</b> 送進底層'}
+];
+// second-layer cases (yellow up)
+const l2Cases=[
+  {name:'往右插', sub:'頂上顏色在右邊', label:'往右插',
+   sit:'先轉 U 讓一個<b>不含黃色</b>的邊塊正面對到中心（倒 T）。如果它<b>頂上的顏色</b>是右邊那一面的顏色，就用「往右插」：<b>U R U′ R′ U′ F′ U F</b>。',
+   solve:['U','R',"U'","R'","U'","F'",'U','F'], chip:['U','R',"U'","R'","U'","F'",'U','F'],
+   intro:'頂上顏色在右邊 → 往右插 <b>U R U′ R′ U′ F′ U F</b>'},
+  {name:'往左插', sub:'頂上顏色在左邊', label:'往左插',
+   sit:'一樣先形成倒 T。如果邊塊<b>頂上的顏色</b>是左邊那一面的顏色，就用「往左插」：<b>U′ L′ U L U F U′ F′</b>。',
+   solve:["U'","L'",'U','L','U','F',"U'","F'"], chip:["U'","L'",'U','L','U','F',"U'","F'"],
+   intro:'頂上顏色在左邊 → 往左插 <b>U′ L′ U L U F U′ F′</b>'}
 ];
 function buildScenarios(containerId, cube, capId, list){
   const c=document.getElementById(containerId), cap=document.getElementById(capId);
@@ -768,29 +863,53 @@ function addPlayControls(scnContainer, cube, cap){
 }
 function renderChips(el,tokens){ el.innerHTML=''; tokens.forEach(t=>{ const c=document.createElement('code'); c.textContent=t.replace("'",'′'); el.appendChild(c); }); }
 
-// --- white cross: case-based teaching with static 圖例 + dynamic step-by-step demo ---
-const crossMini = new Cube(document.getElementById('cross-mini-cube'), {static:true});
-(function buildCrossCases(){
-  const scn=document.getElementById('cross-scn'), cap=document.getElementById('cross-cap');
-  const sit=document.getElementById('cross-situation'), algo=document.getElementById('cross-algo'), stepsEl=document.getElementById('cross-steps');
-  const btns=[];
-  crossCases.forEach((cs,i)=>{
-    const b=document.createElement('button'); b.className='scn s'+(i%3); b.textContent=cs.label;
-    b.onclick=()=>{
-      btns.forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
-      sit.innerHTML=cs.situation;
-      renderChips(algo, cs.solve);
-      stepsEl.innerHTML='';
-      const stepEls=cs.steps.map(t=>{ const li=document.createElement('li'); li.innerHTML=t; stepsEl.appendChild(li); return li; });
-      crossMini.reset(); crossMini.applyInstant(invert(cs.solve));   // static 圖例 frozen at the situation
-      crossCube.setupScenario(cs, cap, {stepList:stepEls});
+// reusable "case gallery": each card is a STATIC mini 3D cube frozen at the case (so you can
+// compare it to your real cube), click it -> main cube adopts the state + shows situation/steps.
+function buildCubeGallery(o){
+  const cardsEl=document.getElementById(o.cardsId), cap=document.getElementById(o.capId);
+  const sit=document.getElementById(o.sitId), algo=document.getElementById(o.algoId);
+  const cube=o.cube, cards=[];
+  o.cases.forEach(cs=>{
+    const card=document.createElement('div'); card.className='ccard';
+    const st=document.createElement('div'); st.className='stage cardmini';
+    const cb=document.createElement('div'); cb.className='cube'; st.appendChild(cb); card.appendChild(cb.parentElement);
+    const nm=document.createElement('div'); nm.className='cname'; nm.textContent=cs.name;
+    const sub=document.createElement('div'); sub.className='csub'; sub.textContent=cs.sub||'';
+    card.appendChild(nm); card.appendChild(sub); cardsEl.appendChild(card);
+    const mini=new Cube(cb, {static:true, flip:o.flip});
+    mini.viewX=(o.viewX!=null?o.viewX:-24); mini.viewY=(o.viewY!=null?o.viewY:-32); mini._applyView();
+    mini.applyInstant(invert(cs.solve));      // freeze mini at the situation
+    card.onclick=()=>{
+      cards.forEach(c=>c.classList.remove('sel')); card.classList.add('sel');
+      sit.innerHTML=cs.sit; renderChips(algo, cs.chip||cs.solve);
+      cube.setupScenario(cs, cap);
     };
-    scn.appendChild(b); btns.push(b);
+    cards.push(card);
   });
-  addPlayControls(scn, crossCube, cap);
-})();
+  addPlayControls(cardsEl, cube, cap);
+}
 
-buildScenarios('corner-scn', cornerCube, 'corner-cap', cornerScenarios);
+// --- white cross gallery (white up) ---
+buildCubeGallery({cardsId:'cross-cards', capId:'cross-cap', sitId:'cross-situation', algoId:'cross-algo',
+  cube:crossCube, cases:crossCases, viewX:-26, viewY:-32});
+// --- white corner gallery (white up) ---
+buildCubeGallery({cardsId:'corner-cards', capId:'corner-cap', sitId:'corner-situation', algoId:'corner-algo',
+  cube:cornerCube, cases:cornerCases, viewX:-26, viewY:-32});
+// --- complete first layer: align sides (maru's two original formulas, white up) ---
+const align1Cases=[
+  {name:'對調相鄰邊', sub:'兩個側邊互換', label:'對調相鄰邊',
+   sit:'白色面拼好、但<b>兩個相鄰邊塊的側面顏色要對調</b>。用 maru 公式：<b>M S D S′ D² M′</b>。',
+   solve:['M','S','D',"S'",'D2',"M'"], chip:['M','S','D',"S'",'D2',"M'"],
+   intro:'對調相鄰邊 <b>M S D S′ D² M′</b>'},
+  {name:'對調相鄰角', sub:'兩個角塊互換', label:'對調相鄰角',
+   sit:'白色面拼好、但<b>兩個相鄰角塊的位置要對調</b>。用 maru 公式：<b>L D R′ L′ D′ R L D L′</b>。',
+   solve:['L','D',"R'","L'","D'",'R','L','D',"L'"], chip:['L','D',"R'","L'","D'",'R','L','D',"L'"],
+   intro:'對調相鄰角 <b>L D R′ L′ D′ R L D L′</b>'}
+];
+const align1Cube = new Cube(document.getElementById('align1-cube'));
+buildCubeGallery({cardsId:'align1-cards', capId:'align1-cap', sitId:'align1-situation', algoId:'align1-algo',
+  cube:align1Cube, cases:align1Cases, viewX:-26, viewY:-32});
+
 
 // ---- 2x2 cube ----
 const twoCube = new Cube(document.getElementById('two-cube'), {n:2});
@@ -802,13 +921,10 @@ const twoScenarios=[
 ];
 buildScenarios('two-scn', twoCube, 'two-cap', twoScenarios);
 
-// ---- second layer (yellow up) ----
+// ---- second layer gallery (yellow up) ----
 const l2Cube = new Cube(document.getElementById('l2-cube'), {flip:['z2']});
-const l2Scenarios=[
-  {label:'插到右邊', solve:['U','R',"U'","R'","U'","F'",'U','F'], intro:'邊塊往右插 <b>U R U′ R′ U′ F′ U F</b>'},
-  {label:'插到左邊', solve:["U'","L'",'U','L','U','F',"U'","F'"], intro:'邊塊往左插 <b>U′ L′ U L U F U′ F′</b>'}
-];
-buildScenarios('l2-scn', l2Cube, 'l2-cap', l2Scenarios);
+buildCubeGallery({cardsId:'l2-cards', capId:'l2-cap', sitId:'l2-situation', algoId:'l2-algo',
+  cube:l2Cube, cases:l2Cases, flip:['z2'], viewX:-30, viewY:-30});
 
 // ---- third / last layer (yellow up) ----
 const l3Cube = new Cube(document.getElementById('l3-cube'), {flip:['z2']});
@@ -819,6 +935,54 @@ const l3Scenarios=[
   {label:'④ 喬邊位', solve:['R',"U'",'R','U','R','U','R',"U'","R'","U'",'R2'],  intro:'邊塊定位 <b>R U′ R U R U R U′ R′ U′ R2</b>'}
 ];
 buildScenarios('l3-scn', l3Cube, 'l3-cap', l3Scenarios);
+
+// --- 對照圖庫：黃色十字辨識器 (2D pattern cards -> pick your case -> animated solve) ---
+const matchCube = new Cube(document.getElementById('match-cube'), {flip:['z2']});
+matchCube.viewX=-52; matchCube.viewY=-30; matchCube._applyView();   // tilt to show the top face more
+const YA=['F','R','U',"R'","U'","F'"];
+// edges layout in the 3x3 top grid: index 1=back,3=left,5=right,7=front (center=4)
+const crossPatterns=[
+  {key:'dot',  name:'點',   sub:'四邊都不是黃', yEdges:[],           label:'點',
+   solve:[...YA,'U','U',...YA,'U','U',...YA],
+   intro:'頂面只有中間黃色 → 這招重複 <b>3 次</b>（每次中間把頂層轉半圈）',
+   sit:'你的頂面<b>只有中間是黃色</b>，四條邊都不是黃色。這叫「點」。做法：對著方塊重複 <b>F R U R′ U′ F′</b>，會依序變成 直角 → 橫線 → 十字（共約 3 次）。'},
+  {key:'L',    name:'直角', sub:'兩條相鄰的黃邊', yEdges:[1,3],       label:'直角',
+   solve:[...YA,...YA],
+   intro:'把兩條黃邊放到左上（後＋左）→ 這招重複 <b>2 次</b>',
+   sit:'你的頂面有<b>兩條相鄰的黃邊</b>（像注音「ㄥ」的直角）。做法：把這兩條黃邊轉到<b>左上角（後方＋左方）</b>，再重複 <b>F R U R′ U′ F′</b> 2 次變十字。'},
+  {key:'line', name:'橫線', sub:'兩條相對的黃邊', yEdges:[3,5],       label:'橫線',
+   solve:[...YA],
+   intro:'把黃線橫著擺（左右）→ 這招做 <b>1 次</b>',
+   sit:'你的頂面有<b>一條橫的黃線</b>（兩條相對的黃邊）。做法：把黃線<b>橫著擺（左右方向）</b>，做一次 <b>F R U R′ U′ F′</b> 就變十字。'}
+];
+(function buildMatchGallery(){
+  const wrap=document.getElementById('match-cards'), cap=document.getElementById('match-cap');
+  const sit=document.getElementById('match-sit'), algo=document.getElementById('match-algo');
+  const cards=[];
+  crossPatterns.forEach(pat=>{
+    const card=document.createElement('div'); card.className='ccard';
+    // build 3x3 top-face preview
+    const grid=document.createElement('div'); grid.className='tgrid';
+    for(let i=0;i<9;i++){
+      const cell=document.createElement('div');
+      const isCenter=(i===4), isEdge=[1,3,5,7].includes(i);
+      const isYellow = isCenter || pat.yEdges.includes(i);
+      cell.className='tc'+(isYellow?' y':(isEdge?'':' n'));
+      grid.appendChild(cell);
+    }
+    const name=document.createElement('div'); name.className='cname'; name.textContent=pat.name;
+    const sub=document.createElement('div'); sub.className='csub'; sub.textContent=pat.sub;
+    card.appendChild(grid); card.appendChild(name); card.appendChild(sub);
+    card.onclick=()=>{
+      cards.forEach(c=>c.classList.remove('sel')); card.classList.add('sel');
+      sit.innerHTML=pat.sit;
+      renderChips(algo, YA);
+      matchCube.setupScenario(pat, cap);
+    };
+    wrap.appendChild(card); cards.push(card);
+  });
+  addPlayControls(wrap, matchCube, cap);
+})();
 
 /* ============================================================
    Completion challenge -> confetti
