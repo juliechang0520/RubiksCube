@@ -22,16 +22,6 @@
 5. **第三層** — 黃色十字（點 / 直角 / 橫線辨識）、翻黃角、喬角塊、喬邊塊
 6. **2×2 延伸** — 8 角塊迷你方塊，同一套右手口訣
 
-## 🚀 線上觀看（GitHub Pages）
-
-網址：`https://<你的帳號>.github.io/<repo名>/`
-
-### 三步驟啟用 GitHub Pages
-1. 進入這個 repo 的 **Settings（設定）**
-2. 左側選 **Pages**
-3. Source 選 **Deploy from a branch** → Branch 選 **main**、資料夾選 **/(root)** → 按 **Save**
-
-等一兩分鐘，重新整理 Pages 頁面就會看到你的網址。用手機瀏覽器打開即可，也可以「加入主畫面」像 App 一樣使用。
 
 ## 📄 授權
 
